@@ -10,12 +10,8 @@ import qualified Data.Set as S
 
 -- Return all anagrams of the given string
 -- that appear in the given dictionary file.
-fastAnagrams ::
-  Chars
-  -> FilePath
-  -> IO (List Chars)
-fastAnagrams =
-  error "todo: Course.FastAnagrams#fastAnagrams"
+fastAnagrams :: Chars -> FilePath -> IO (List Chars)
+fastAnagrams = error "todo: Course.FastAnagrams#fastAnagrams"
 
 newtype NoCaseString =
   NoCaseString {

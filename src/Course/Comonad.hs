@@ -36,10 +36,5 @@ instance Comonad ExactlyOne where
 --
 -- >>> (+10) <$$> ExactlyOne 7
 -- ExactlyOne 17
-(<$$>) ::
-  Comonad f =>
-  (a -> b)
-  -> f a
-  -> f b
-(<$$>) =
-  error "todo: Course.Comonad#(<$>)"
+(<$$>) :: Comonad f => (a -> b) -> f a -> f b
+(<$$>) = error "todo: Course.Comonad#(<$>)"

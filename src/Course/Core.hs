@@ -99,23 +99,11 @@ import Control.Arrow(
   )
 import Data.Char
 
-ifThenElse ::
-  Bool
-  -> a
-  -> a
-  -> a
-ifThenElse True t _ =
-  t
-ifThenElse False _ f =
-  f
+ifThenElse :: Bool -> a -> a -> a
+ifThenElse True  t _ = t
+ifThenElse False _ f = f
 
-bool ::
-  a
-  -> a
-  -> Bool
-  -> a
-bool f _ False =
-  f
-bool _ t True =
-  t
+bool :: a -> a -> Bool -> a
+bool f _ False = f
+bool _ t True  = t
 

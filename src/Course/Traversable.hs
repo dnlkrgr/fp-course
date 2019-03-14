@@ -67,12 +67,8 @@ instance Traversable Optional where
 --
 -- >>> sequenceA (Full (*10)) 6
 -- Full 60
-sequenceA ::
-  (Applicative f, Traversable t) =>
-  t (f a)
-  -> f (t a)
-sequenceA =
-  error "todo: Course.Traversable#sequenceA"
+sequenceA :: (Applicative f, Traversable t) => t (f a) -> f (t a)
+sequenceA = error "todo: Course.Traversable#sequenceA"
 
 instance (Traversable f, Traversable g) =>
   Traversable (Compose f g) where

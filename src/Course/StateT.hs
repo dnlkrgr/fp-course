@@ -96,78 +96,50 @@ type State' s a =
 --
 -- >>> runStateT (state' $ runState $ put 1) 0
 -- ExactlyOne  ((),1)
-state' ::
-  (s -> (a, s))
-  -> State' s a
-state' =
-  error "todo: Course.StateT#state'"
+state' :: (s -> (a, s)) -> State' s a
+state' = error "todo: Course.StateT#state'"
 
 -- | Provide an unwrapper for `State'` values.
 --
 -- >>> runState' (state' $ runState $ put 1) 0
 -- ((),1)
-runState' ::
-  State' s a
-  -> s
-  -> (a, s)
-runState' =
-  error "todo: Course.StateT#runState'"
+runState' :: State' s a -> s -> (a, s)
+runState' = error "todo: Course.StateT#runState'"
 
 -- | Run the `StateT` seeded with `s` and retrieve the resulting state.
 --
 -- >>> execT (StateT $ \s -> Full ((), s + 1)) 2
 -- Full 3
-execT ::
-  Functor f =>
-  StateT s f a
-  -> s
-  -> f s
-execT =
-  error "todo: Course.StateT#execT"
+execT :: Functor f => StateT s f a -> s -> f s
+execT = error "todo: Course.StateT#execT"
 
 -- | Run the `State'` seeded with `s` and retrieve the resulting state.
 --
 -- >>> exec' (state' $ \s -> ((), s + 1)) 2
 -- 3
-exec' ::
-  State' s a
-  -> s
-  -> s
-exec' =
-  error "todo: Course.StateT#exec'"
+exec' :: State' s a -> s -> s
+exec' = error "todo: Course.StateT#exec'"
 
 -- | Run the `StateT` seeded with `s` and retrieve the resulting value.
 --
 -- >>> evalT (StateT $ \s -> Full (even s, s + 1)) 2
 -- Full True
-evalT ::
-  Functor f =>
-  StateT s f a
-  -> s
-  -> f a
-evalT =
-  error "todo: Course.StateT#evalT"
+evalT :: Functor f => StateT s f a -> s -> f a
+evalT = error "todo: Course.StateT#evalT"
 
 -- | Run the `State'` seeded with `s` and retrieve the resulting value.
 --
 -- >>> eval' (state' $ \s -> (even s, s + 1)) 5
 -- False
-eval' ::
-  State' s a
-  -> s
-  -> a
-eval' =
-  error "todo: Course.StateT#eval'"
+eval' :: State' s a -> s -> a
+eval' = error "todo: Course.StateT#eval'"
 
 -- | A `StateT` where the state also distributes into the produced value.
 --
 -- >>> (runStateT (getT :: StateT Int List Int) 3)
 -- [(3,3)]
-getT ::
-  Applicative f =>
-  StateT s f s
-getT =
-  error "todo: Course.StateT#getT"
+getT :: Applicative f => StateT s f s
+getT = error "todo: Course.StateT#getT"
 
 -- | A `StateT` where the resulting state is seeded with the given value.
 --
@@ -176,24 +148,16 @@ getT =
 --
 -- >>> runStateT (putT 2 :: StateT Int List ()) 0
 -- [((),2)]
-putT ::
-  Applicative f =>
-  s
-  -> StateT s f ()
-putT =
-  error "todo: Course.StateT#putT"
+putT :: Applicative f => s -> StateT s f ()
+putT = error "todo: Course.StateT#putT"
 
 -- | Remove all duplicate elements in a `List`.
 --
 -- /Tip:/ Use `filtering` and `State'` with a @Data.Set#Set@.
 --
 -- prop> \xs -> distinct' xs == distinct' (flatMap (\x -> x :. x :. Nil) xs)
-distinct' ::
-  (Ord a, Num a) =>
-  List a
-  -> List a
-distinct' =
-  error "todo: Course.StateT#distinct'"
+distinct' :: (Ord a, Num a) => List a -> List a
+distinct' = error "todo: Course.StateT#distinct'"
 
 -- | Remove all duplicate elements in a `List`.
 -- However, if you see a value greater than `100` in the list,
@@ -206,12 +170,8 @@ distinct' =
 --
 -- >>> distinctF $ listh [1,2,3,2,1,101]
 -- Empty
-distinctF ::
-  (Ord a, Num a) =>
-  List a
-  -> Optional (List a)
-distinctF =
-  error "todo: Course.StateT#distinctF"
+distinctF :: (Ord a, Num a) => List a -> Optional (List a)
+distinctF = error "todo: Course.StateT#distinctF"
 
 -- | An `OptionalT` is a functor of an `Optional` value.
 data OptionalT f a =
@@ -337,12 +297,8 @@ instance Monad (Logger l) where
 --
 -- >>> log1 1 2
 -- Logger [1] 2
-log1 ::
-  l
-  -> a
-  -> Logger l a
-log1 =
-  error "todo: Course.StateT#log1"
+log1 :: l -> a -> Logger l a
+log1 = error "todo: Course.StateT#log1"
 
 -- | Remove all duplicate integers from a list. Produce a log as you go.
 -- If there is an element above 100, then abort the entire computation and produce no result.
@@ -358,21 +314,10 @@ log1 =
 --
 -- >>> distinctG $ listh [1,2,3,2,6,106]
 -- Logger ["even number: 2","even number: 2","even number: 6","aborting > 100: 106"] Empty
-distinctG ::
-  (Integral a, Show a) =>
-  List a
-  -> Logger Chars (Optional (List a))
-distinctG =
-  error "todo: Course.StateT#distinctG"
+distinctG :: (Integral a, Show a) => List a -> Logger Chars (Optional (List a))
+distinctG = error "todo: Course.StateT#distinctG"
 
-onFull ::
-  Applicative f =>
-  (t -> f (Optional a))
-  -> Optional t
-  -> f (Optional a)
-onFull g o =
-  case o of
-    Empty ->
-      pure Empty
-    Full a ->
-      g a
+onFull :: Applicative f => (t -> f (Optional a)) -> Optional t -> f (Optional a)
+onFull g o = case o of
+  Empty  -> pure Empty
+  Full a -> g a
