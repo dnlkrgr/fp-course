@@ -132,6 +132,7 @@ test-suite            my-stuff
                       Course.ApplicativeTest
                       Course.FunctorTest
                       Course.ListTest
+                      Course.MonadTest
 
   default-language:
                       Haskell2010

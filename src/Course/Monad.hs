@@ -32,48 +32,35 @@ infixr 1 =<<
 -- >>> (\x -> ExactlyOne(x+1)) =<< ExactlyOne 2
 -- ExactlyOne 3
 instance Monad ExactlyOne where
-  (=<<) ::
-    (a -> ExactlyOne b)
-    -> ExactlyOne a
-    -> ExactlyOne b
-  (=<<) =
-    error "todo: Course.Monad (=<<)#instance ExactlyOne"
+  (=<<) :: (a -> ExactlyOne b) -> ExactlyOne a -> ExactlyOne b
+  (=<<) amb (ExactlyOne a) = amb a
 
 -- | Binds a function on a List.
 --
 -- >>> (\n -> n :. n :. Nil) =<< (1 :. 2 :. 3 :. Nil)
 -- [1,1,2,2,3,3]
 instance Monad List where
-  (=<<) ::
-    (a -> List b)
-    -> List a
-    -> List b
-  (=<<) =
-    error "todo: Course.Monad (=<<)#instance List"
+  (=<<) :: (a -> List b) -> List a -> List b
+  (=<<) _ Nil = Nil
+  (=<<) f (x :. xs) = f x ++ (f =<< xs)
+
 
 -- | Binds a function on an Optional.
 --
 -- >>> (\n -> Full (n + n)) =<< Full 7
 -- Full 14
 instance Monad Optional where
-  (=<<) ::
-    (a -> Optional b)
-    -> Optional a
-    -> Optional b
-  (=<<) =
-    error "todo: Course.Monad (=<<)#instance Optional"
+  (=<<) :: (a -> Optional b) -> Optional a -> Optional b
+  (=<<) _ Empty = Empty
+  (=<<) f (Full a) = f a
 
 -- | Binds a function on the reader ((->) t).
 --
 -- >>> ((*) =<< (+10)) 7
 -- 119
 instance Monad ((->) t) where
-  (=<<) ::
-    (a -> ((->) t b))
-    -> ((->) t a)
-    -> ((->) t b)
-  (=<<) =
-    error "todo: Course.Monad (=<<)#instance ((->) t)"
+  (=<<) :: (a -> ((->) t b)) -> ((->) t a) -> ((->) t b)
+  (=<<) g f = \t -> (g . f $ t) t
 
 -- | Witness that all things with (=<<) and (<$>) also have (<*>).
 --
@@ -107,7 +94,7 @@ instance Monad ((->) t) where
 -- >>> ((*) <**> (+2)) 3
 -- 15
 (<**>) :: Monad f => f (a -> b) -> f a -> f b
-(<**>) = error "todo: Course.Monad#(<**>)"
+(<**>) = (<*>)
 
 infixl 4 <**>
 
@@ -125,7 +112,7 @@ infixl 4 <**>
 -- >>> join (+) 7
 -- 14
 join :: Monad f => f (f a) -> f a
-join = error "todo: Course.Monad#join"
+join ffa = id =<< ffa
 
 -- | Implement a flipped version of @(=<<)@, however, use only
 -- @join@ and @(<$>)@.
@@ -134,7 +121,7 @@ join = error "todo: Course.Monad#join"
 -- >>> ((+10) >>= (*)) 7
 -- 119
 (>>=) :: Monad f => f a -> (a -> f b) -> f b
-(>>=) = error "todo: Course.Monad#(>>=)"
+(>>=) fa afb = join $ afb <$> fa
 
 infixl 1 >>=
 
@@ -144,7 +131,7 @@ infixl 1 >>=
 -- >>> ((\n -> n :. n :. Nil) <=< (\n -> n+1 :. n+2 :. Nil)) 1
 -- [2,2,3,3]
 (<=<) :: Monad f => (b -> f c) -> (a -> f b) -> a -> f c
-(<=<) = error "todo: Course.Monad#(<=<)"
+(<=<) bfc afb a = afb a >>= bfc
 
 infixr 1 <=<
 

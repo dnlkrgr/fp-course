@@ -44,7 +44,7 @@ infixl 4 <*>
 -- >>> ExactlyOne (+10) <*> ExactlyOne 8
 -- ExactlyOne 18
 instance Applicative ExactlyOne where
-  pure :: a -> ExactlyOne a 
+  pure :: a -> ExactlyOne a
   pure = ExactlyOne
 
   (<*>) :: ExactlyOne (a -> b) -> ExactlyOne a -> ExactlyOne b
@@ -264,7 +264,7 @@ lift1 = (<$>)
 -- >>> sequence ((*10) :. (+2) :. Nil) 6
 -- [60,8]
 sequence :: Applicative f => List (f a) -> f (List a)
-sequence Nil = pure Nil
+sequence Nil         = pure Nil
 sequence (fa :. fas) = (:.) <$> fa <*> sequence fas
 
 
@@ -310,7 +310,7 @@ replicateA n = sequence . take n . repeat
 -- [[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3]]
 --
 filtering :: Applicative f => (a -> f Bool) -> List a -> f (List a)
-filtering afb la = 
+filtering afb la =
   map snd <$> filter fst <$> (lift2 zip) (sequence $ afb <$> la) (pure la)
 
 -----------------------

@@ -6,6 +6,7 @@ import Course.ApplicativeTest (test_Applicative)
 import Course.FunctorTest (test_Functor)
 import Course.ListTest (test_List)
 import Course.OptionalTest (test_Optional)
+import Course.MonadTest (test_Monad)
 
 main :: IO ()
 main = defaultMain tests
@@ -17,5 +18,5 @@ tests =
   , test_List
   , test_Functor
   , test_Applicative
+  , test_Monad
   ]
-
